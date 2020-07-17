@@ -18,9 +18,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -47,13 +44,10 @@ public class Clock extends Fragment {
     String Name, Date, Time;
     IntentFilter s_intentFilter;
     Switch sw_one, sw_two, sw_three;
-    TextView name, title, description, keyword1, keyword2, keyword3, keyword4, keyword5;
-    TextView fav_alarm1, fav_alarm2, fav_alarm3;
-    Button ok, skip;
-    EditText name_edit, keyword1_edit, keyword2_edit, keyword3_edit, keyword4_edit, keyword5_edit;
+    TextView fav_alarm1, fav_alarm2, fav_alarm3, fav_alarm4;
     TextView alarm_status;
-    int fav_hr_1, fav_hr_2, fav_hr_3;
-    int fav_min_1, fav_min_2, fav_min_3;
+    int fav_hr_1, fav_hr_2, fav_hr_3, fav_hr_4;
+    int fav_min_1, fav_min_2, fav_min_3, fav_min_4;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -96,7 +90,6 @@ public class Clock extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,23 +110,8 @@ public class Clock extends Fragment {
         fav_alarm1 = view.findViewById(R.id.fav_alarm1);
         fav_alarm2 = view.findViewById(R.id.fav_alarm2);
         fav_alarm3 = view.findViewById(R.id.fav_alarm3);
-        title = view.findViewById(R.id.fg_title);
-        description = view.findViewById(R.id.fg_description);
-        keyword1 = view.findViewById(R.id.fg_kw1);
-        keyword2 = view.findViewById(R.id.fg_kw2);
-        keyword3 = view.findViewById(R.id.fg_kw3);
-        keyword4 = view.findViewById(R.id.fg_kw4);
-        keyword5 = view.findViewById(R.id.fg_kw5);
-        ok = view.findViewById(R.id.fg_ok);
-        skip = view.findViewById(R.id.fg_skip);
-        keyword1_edit = view.findViewById(R.id.fg_kw1_edit);
-        keyword2_edit = view.findViewById(R.id.fg_kw2_edit);
-        keyword3_edit = view.findViewById(R.id.fg_kw3_edit);
-        keyword4_edit = view.findViewById(R.id.fg_kw4_edit);
-        keyword5_edit = view.findViewById(R.id.fg_kw5_edit);
+        fav_alarm4 = view.findViewById(R.id.fav_alarm4);
         alarm_status = view.findViewById(R.id.alarm_status);
-        name = view.findViewById(R.id.fg_name);
-        name_edit = view.findViewById(R.id.fg_name_edit);
 
         final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
 
@@ -154,7 +132,11 @@ public class Clock extends Fragment {
         currentHourIn12Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
         currentMinute[0] = rightNow[0].get(Calendar.MINUTE);
         Date = find_date(Arrays.toString(currentDate).replaceAll("\\[|\\]|,|\\s", "")) + "/" + find_month(Arrays.toString(currentMonth).replaceAll("\\[|\\]|,|\\s", "")) + "/" + Arrays.toString(currentYear).replaceAll("\\[|\\]|,|\\s", "") + ", " + find_day(Arrays.toString(currentDay).replaceAll("\\[|\\]|,|\\s", ""));
-        if(currentHourIn12Format[0] < 10 && currentMinute[0] > 9){
+
+        if(currentHourIn12Format[0] < 10 && currentMinute[0] < 10){
+            Time = "0" + currentHourIn12Format[0] + " : " + "0" + currentMinute[0];
+        }
+        else if(currentHourIn12Format[0] < 10 && currentMinute[0] > 9){
             Time = "0" + currentHourIn12Format[0] + " : " + currentMinute[0];
         }else if(currentHourIn12Format[0] > 9 && currentMinute[0] < 10){
             Time = currentHourIn12Format[0] + " : " + "0" + currentMinute[0];
@@ -361,56 +343,55 @@ public class Clock extends Fragment {
         Date_id.setText(Date);
         Time_id.setText(Time);
 
-        if(clockSettings.getBoolean("my_first_time", true)){
-            SharedPreferences.Editor prefEditor = clockSettings.edit();
-            prefEditor.putInt("FavHr1", 5);
-            prefEditor.putInt("FavMin1", 30);
-            prefEditor.putInt("FavHr2", 6);
-            prefEditor.putInt("FavMin2", 30);
-            prefEditor.putInt("FavHr3", 7);
-            prefEditor.putInt("FavMin3", 30);
-            prefEditor.putBoolean("my_first_time", false);
-            prefEditor.apply();
-            enable_foreground(currentHourIn24Format);
+        fav_hr_1 = clockSettings.getInt("FavHr1", 4);
+        fav_hr_2 = clockSettings.getInt("FavHr2", 5);
+        fav_hr_3 = clockSettings.getInt("FavHr3", 6);
+        fav_hr_4 = clockSettings.getInt("FavHr4", 7);
+        fav_min_1 = clockSettings.getInt("FavMin1", 30);
+        fav_min_2 = clockSettings.getInt("FavMin2", 30);
+        fav_min_3 = clockSettings.getInt("FavMin3", 30);
+        fav_min_4 = clockSettings.getInt("FavMin4", 30);
+        if(fav_hr_1 > 9 & fav_min_1 > 9){
+            fav_alarm1.setText(fav_hr_1 + " : " + fav_min_1);
+        }else if(fav_hr_1 < 10 & fav_min_1 < 10){
+            fav_alarm1.setText("0" + fav_hr_1 + " : " + "0" +fav_min_1);
+        }else if(fav_hr_1 > 9 & fav_min_1 < 10){
+            fav_alarm1.setText(fav_hr_1 + " : " + "0" +fav_min_1);
         }else{
-            fav_hr_1 = clockSettings.getInt("FavHr1", 5);
-            fav_hr_2 = clockSettings.getInt("FavHr2", 6);
-            fav_hr_3 = clockSettings.getInt("FavHr3", 7);;
-            fav_min_1 = clockSettings.getInt("FavMin1", 30);
-            fav_min_2 = clockSettings.getInt("FavMin2", 30);
-            fav_min_3 = clockSettings.getInt("FavMin3", 30);
-            if(fav_hr_1 > 9 & fav_min_1 > 9){
-                fav_alarm1.setText(fav_hr_1 + " : " + fav_min_1);
-            }else if(fav_hr_1 < 10 & fav_min_1 < 10){
-                fav_alarm1.setText("0" + fav_hr_1 + " : " + "0" +fav_min_1);
-            }else if(fav_hr_1 > 9 & fav_min_1 < 10){
-                fav_alarm1.setText(fav_hr_1 + " : " + "0" +fav_min_1);
-            }else{
-                fav_alarm1.setText("0" + fav_hr_1 + " : " + fav_min_1);
-            }
-
-            if(fav_hr_2 > 9 & fav_min_2 > 9){
-                fav_alarm1.setText(fav_hr_2 + " : " + fav_min_2);
-            }else if(fav_hr_2 < 10 & fav_min_2 < 10){
-                fav_alarm1.setText("0" + fav_hr_2 + " : " + "0" +fav_min_2);
-            }else if(fav_hr_2 > 9 & fav_min_2 < 10){
-                fav_alarm1.setText(fav_hr_2 + " : " + "0" +fav_min_2);
-            }else{
-                fav_alarm1.setText("0" + fav_hr_2 + " : " + fav_min_2);
-            }
-
-            if(fav_hr_3 > 9 & fav_min_3 > 9){
-                fav_alarm1.setText(fav_hr_3 + " : " + fav_min_3);
-            }else if(fav_hr_3 < 10 & fav_min_3 < 10){
-                fav_alarm1.setText("0" + fav_hr_3 + " : " + "0" +fav_min_3);
-            }else if(fav_hr_3 > 9 & fav_min_3 < 10){
-                fav_alarm1.setText(fav_hr_3 + " : " + "0" +fav_min_3);
-            }else{
-                fav_alarm1.setText("0" + fav_hr_3 + " : " + fav_min_3);
-            }
-
-            enable_background(currentHourIn24Format, clockSettings);
+            fav_alarm1.setText("0" + fav_hr_1 + " : " + fav_min_1);
         }
+
+        if(fav_hr_2 > 9 & fav_min_2 > 9){
+            fav_alarm2.setText(fav_hr_2 + " : " + fav_min_2);
+        }else if(fav_hr_2 < 10 & fav_min_2 < 10){
+            fav_alarm2.setText("0" + fav_hr_2 + " : " + "0" +fav_min_2);
+        }else if(fav_hr_2 > 9 & fav_min_2 < 10){
+            fav_alarm2.setText(fav_hr_2 + " : " + "0" +fav_min_2);
+        }else{
+            fav_alarm2.setText("0" + fav_hr_2 + " : " + fav_min_2);
+        }
+
+        if(fav_hr_3 > 9 & fav_min_3 > 9){
+            fav_alarm3.setText(fav_hr_3 + " : " + fav_min_3);
+        }else if(fav_hr_3 < 10 & fav_min_3 < 10){
+            fav_alarm3.setText("0" + fav_hr_3 + " : " + "0" +fav_min_3);
+        }else if(fav_hr_3 > 9 & fav_min_3 < 10){
+            fav_alarm3.setText(fav_hr_3 + " : " + "0" +fav_min_3);
+        }else{
+            fav_alarm3.setText("0" + fav_hr_3 + " : " + fav_min_3);
+        }
+
+        if(fav_hr_4 > 9 & fav_min_4 > 9){
+            fav_alarm4.setText(fav_hr_4 + " : " + fav_min_4);
+        }else if(fav_hr_4 < 10 & fav_min_4 < 10){
+            fav_alarm4.setText("0" + fav_hr_4 + " : " + "0" +fav_min_4);
+        }else if(fav_hr_4 > 9 & fav_min_4 < 10){
+            fav_alarm4.setText(fav_hr_4 + " : " + "0" +fav_min_4);
+        }else{
+            fav_alarm4.setText("0" + fav_hr_4 + " : " + fav_min_4);
+        }
+
+        enable_background(currentHourIn24Format, clockSettings);
 
         final BroadcastReceiver m_timeChangedReceiver = new BroadcastReceiver() {
             @Override
@@ -439,40 +420,6 @@ public class Clock extends Fragment {
 
         getActivity().registerReceiver(m_timeChangedReceiver, s_intentFilter);
 
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String ip_name = name_edit.getText().toString();
-                if(!ip_name.isEmpty()){
-                    ip_name = " " + ip_name;
-                }
-                String ip_kw1 = keyword1_edit.getText().toString();
-                String ip_kw2 = keyword2_edit.getText().toString();
-                String ip_kw3 = keyword3_edit.getText().toString();
-                String ip_kw4 = keyword4_edit.getText().toString();
-                String ip_kw5 = keyword5_edit.getText().toString();
-                SharedPreferences.Editor prefEditor = clockSettings.edit();
-                prefEditor.putString("UserName", ip_name);
-                prefEditor.putString("KeyWord1", ip_kw1);
-                prefEditor.putString("KeyWord2", ip_kw2);
-                prefEditor.putString("KeyWord3", ip_kw3);
-                prefEditor.putString("KeyWord4", ip_kw4);
-                prefEditor.putString("KeyWord5", ip_kw5);
-                prefEditor.putBoolean("my_first_time", false);
-                prefEditor.apply();
-                enable_background(currentHourIn24Format, clockSettings);
-            }
-        });
-
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences.Editor prefEditor = clockSettings.edit();
-                prefEditor.putBoolean("my_first_time", false);
-                prefEditor.apply();
-                enable_background(currentHourIn24Format, clockSettings);
-            }
-        });
         return view;
     }
 
@@ -558,82 +505,9 @@ public class Clock extends Fragment {
         return output;
     }
 
-    void enable_foreground(int currentHourIn24Format){
-        sticker.setVisibility(View.GONE);
-        Message.setVisibility(View.GONE);
-        divider1.setVisibility(View.GONE);
-        divider2.setVisibility(View.GONE);
-        divider3.setVisibility(View.GONE);
-        Date_id.setVisibility(View.GONE);
-        Time_id.setVisibility(View.GONE);
-        sw_one.setVisibility(View.GONE);
-        sw_two.setVisibility(View.GONE);
-        sw_three.setVisibility(View.GONE);
-        fav_alarm1.setVisibility(View.GONE);
-        fav_alarm2.setVisibility(View.GONE);
-        fav_alarm3.setVisibility(View.GONE);
-        alarm_status.setVisibility(View.GONE);
-        title.setVisibility(View.VISIBLE);
-        description.setVisibility(View.VISIBLE);
-        name.setVisibility(View.VISIBLE);
-        name_edit.setVisibility(View.VISIBLE);
-        keyword1.setVisibility(View.VISIBLE);
-        keyword2.setVisibility(View.VISIBLE);
-        keyword3.setVisibility(View.VISIBLE);
-        keyword4.setVisibility(View.VISIBLE);
-        keyword5.setVisibility(View.VISIBLE);
-        ok.setVisibility(View.VISIBLE);
-        skip.setVisibility(View.VISIBLE);
-        keyword1_edit.setVisibility(View.VISIBLE);
-        keyword2_edit.setVisibility(View.VISIBLE);
-        keyword3_edit.setVisibility(View.VISIBLE);
-        keyword4_edit.setVisibility(View.VISIBLE);
-        keyword5_edit.setVisibility(View.VISIBLE);
-        if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
-            main_layout.setBackgroundResource(R.drawable.m_glass);
-        }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
-            main_layout.setBackgroundResource(R.drawable.a_glass);
-        }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
-            main_layout.setBackgroundResource(R.drawable.e_glass);
-        }else {
-            main_layout.setBackgroundColor(Color.parseColor("#202020"));
-//            main_layout.setBackgroundResource(R.drawable.n_glass);
-        }
-    }
-
     void enable_background(int currentHourIn24Format, SharedPreferences clockSettings){
         Name = clockSettings.getString("UserName", "");
 
-        title.setVisibility(View.GONE);
-        description.setVisibility(View.GONE);
-        name.setVisibility(View.GONE);
-        name_edit.setVisibility(View.GONE);
-        keyword1.setVisibility(View.GONE);
-        keyword2.setVisibility(View.GONE);
-        keyword3.setVisibility(View.GONE);
-        keyword4.setVisibility(View.GONE);
-        keyword5.setVisibility(View.GONE);
-        ok.setVisibility(View.GONE);
-        skip.setVisibility(View.GONE);
-        keyword1_edit.setVisibility(View.GONE);
-        keyword2_edit.setVisibility(View.GONE);
-        keyword3_edit.setVisibility(View.GONE);
-        keyword4_edit.setVisibility(View.GONE);
-        keyword5_edit.setVisibility(View.GONE);
-        sticker.setVisibility(View.VISIBLE);
-        Message.setVisibility(View.VISIBLE);
-        divider1.setVisibility(View.VISIBLE);
-        divider2.setVisibility(View.VISIBLE);
-        divider3.setVisibility(View.VISIBLE);
-        Date_id.setVisibility(View.VISIBLE);
-        Time_id.setVisibility(View.VISIBLE);
-        sw_one.setVisibility(View.VISIBLE);
-        sw_two.setVisibility(View.VISIBLE);
-        sw_three.setVisibility(View.VISIBLE);
-        fav_alarm1.setVisibility(View.VISIBLE);
-        fav_alarm2.setVisibility(View.VISIBLE);
-        fav_alarm3.setVisibility(View.VISIBLE);
-        alarm_status.setVisibility(View.VISIBLE);
         if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
             main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
             sticker.setImageBitmap(morning);

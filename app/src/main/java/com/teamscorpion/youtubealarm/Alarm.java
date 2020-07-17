@@ -1,12 +1,16 @@
 package com.teamscorpion.youtubealarm;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class Alarm extends Fragment {
+    ConstraintLayout main_layout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +64,19 @@ public class Alarm extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_alarm, container, false);
+        View view =  inflater.inflate(R.layout.fragment_alarm, container, false);
+        main_layout = view.findViewById(R.id.alarm_layout);
+        final Calendar[] rightNow = {Calendar.getInstance()};
+        final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
+        if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
+            main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+        }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
+            main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+        }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
+            main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+        }else {
+            main_layout.setBackgroundColor(Color.parseColor("#202020"));
+        }
+        return view;
     }
 }
