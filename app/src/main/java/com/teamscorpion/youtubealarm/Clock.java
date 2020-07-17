@@ -400,6 +400,7 @@ public class Clock extends Fragment {
                 assert action != null;
                 if (action.equals(Intent.ACTION_TIME_TICK)) {
                     rightNow[0] = Calendar.getInstance();
+                    final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
                     currentHourIn12Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
                     currentMinute[0] = rightNow[0].get(Calendar.MINUTE);
                     String Time_new;
@@ -414,6 +415,40 @@ public class Clock extends Fragment {
                         Time_new = currentHourIn12Format[0] + " : " + currentMinute[0];
                     }
                     Time_id.setText(Time_new);
+
+                    if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
+                        main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+                        sticker.setImageBitmap(morning);
+                        Message.setTextColor(Color.parseColor("#f2e3e4"));
+                        divider1.setImageBitmap(morning_line);
+                        divider2.setImageBitmap(morning_line);
+                        divider3.setImageBitmap(morning_line);
+                        Message.setText("Hi"+Name+", Good Morning\n\n"+quotes[random_no]);
+                    }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
+                        main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+                        sticker.setImageBitmap(afternoon);
+                        Message.setTextColor(Color.parseColor("#f9c3c3"));
+                        divider1.setImageBitmap(afternoon_line);
+                        divider2.setImageBitmap(afternoon_line);
+                        divider3.setImageBitmap(afternoon_line);
+                        Message.setText("Hi"+Name+", Good Afternoon\n\n"+quotes[random_no]);
+                    }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
+                        main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+                        sticker.setImageBitmap(evening);
+                        Message.setTextColor(Color.parseColor("#ffffff"));
+                        divider1.setImageBitmap(evening_line);
+                        divider2.setImageBitmap(evening_line);
+                        divider3.setImageBitmap(evening_line);
+                        Message.setText("Hi"+Name+", Good Evening\n\n"+quotes[random_no]);
+                    }else {
+                        main_layout.setBackgroundColor(Color.parseColor("#202020"));
+                        sticker.setImageBitmap(night);
+                        Message.setTextColor(Color.parseColor("#807e7e"));
+                        divider1.setImageBitmap(night_line);
+                        divider2.setImageBitmap(night_line);
+                        divider3.setImageBitmap(night_line);
+                        Message.setText("Hi"+Name+", Good Night\n\n"+quotes[random_no]);
+                    }
                 }
             }
         };

@@ -1,5 +1,9 @@
 package com.teamscorpion.youtubealarm;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -19,6 +23,7 @@ import java.util.Calendar;
  */
 public class Alarm extends Fragment {
     ConstraintLayout main_layout;
+    IntentFilter s_intentFilter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,6 +82,35 @@ public class Alarm extends Fragment {
         }else {
             main_layout.setBackgroundColor(Color.parseColor("#202020"));
         }
+
+        s_intentFilter = new IntentFilter();
+        s_intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        s_intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        s_intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+        final BroadcastReceiver m_timeChangedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String action = intent.getAction();
+                assert action != null;
+
+                if (action.equals(Intent.ACTION_TIME_TICK)) {
+                    rightNow[0] = Calendar.getInstance();
+                    final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
+
+                    if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
+                        main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+                    }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
+                        main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+                    }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
+                        main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+                    }else {
+                        main_layout.setBackgroundColor(Color.parseColor("#202020"));
+                    }
+                }
+            }
+        };
+        getActivity().registerReceiver(m_timeChangedReceiver, s_intentFilter);
+
         return view;
     }
 }

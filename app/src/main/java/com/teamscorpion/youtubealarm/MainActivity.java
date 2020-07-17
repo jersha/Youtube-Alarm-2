@@ -45,15 +45,15 @@ public class MainActivity extends AppCompatActivity {
         name = findViewById(R.id.fg_name);
         name_edit = findViewById(R.id.fg_name_edit);
 
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        );
+
         if(!clockSettings.getBoolean("my_first_time", true)){
             startActivity(intent);
             finish();
         }else{
-            getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            );
-
             final Calendar[] rightNow = {Calendar.getInstance()};
             final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
 
