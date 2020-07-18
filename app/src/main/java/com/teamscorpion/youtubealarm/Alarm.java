@@ -13,6 +13,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 
@@ -22,8 +27,11 @@ import java.util.Calendar;
  * create an instance of this fragment.
  */
 public class Alarm extends Fragment {
-    ConstraintLayout main_layout;
+    ConstraintLayout main_layout1;
+    RelativeLayout main_layout3;
+    LinearLayout main_layout2;
     IntentFilter s_intentFilter;
+    FloatingActionButton add;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,17 +78,25 @@ public class Alarm extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_alarm, container, false);
-        main_layout = view.findViewById(R.id.alarm_layout);
+        main_layout1 = view.findViewById(R.id.alarm_layout1);
+        main_layout2 = view.findViewById(R.id.alarm_layout2);
+        main_layout3 = view.findViewById(R.id.alarm_layout3);
+        add = view.findViewById(R.id.pink_icon);
         final Calendar[] rightNow = {Calendar.getInstance()};
         final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
-            main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+            main_layout3.setBackgroundColor(Color.parseColor("#f3989d"));
+            add.setBackgroundColor(Color.parseColor("#f3989d"));
         }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
-            main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+            main_layout3.setBackgroundColor(Color.parseColor("#d63447"));
+            add.setBackgroundColor(Color.parseColor("#d63447"));
         }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
-            main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+            main_layout3.setBackgroundColor(Color.parseColor("#febc6e"));
+            add.setBackgroundColor(Color.parseColor("#febc6e"));
         }else {
-            main_layout.setBackgroundColor(Color.parseColor("#202020"));
+            main_layout3.setBackgroundColor(Color.parseColor("#202020"));
+            add.setBackgroundColor(Color.parseColor("#202020"));
+            add.setImageResource(R.drawable.n_add);
         }
 
         s_intentFilter = new IntentFilter();
@@ -98,13 +114,17 @@ public class Alarm extends Fragment {
                     final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
 
                     if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
-                        main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+                        main_layout3.setBackgroundColor(Color.parseColor("#f3989d"));
+                        add.setBackgroundColor(Color.parseColor("#f3989d"));
                     }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
-                        main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+                        main_layout3.setBackgroundColor(Color.parseColor("#d63447"));
+                        add.setBackgroundColor(Color.parseColor("#d63447"));
                     }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
-                        main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+                        main_layout3.setBackgroundColor(Color.parseColor("#febc6e"));
+                        add.setBackgroundColor(Color.parseColor("#febc6e"));
                     }else {
-                        main_layout.setBackgroundColor(Color.parseColor("#202020"));
+                        main_layout3.setBackgroundColor(Color.parseColor("#202020"));
+                        add.setImageResource(R.drawable.n_add);
                     }
                 }
             }

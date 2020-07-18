@@ -4,83 +4,70 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import java.util.Calendar;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Settings#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Settings extends Fragment {
     ConstraintLayout main_layout;
     IntentFilter s_intentFilter;
+    ImageView iv_dividor1, iv_dividor2, iv_dividor3;
+    Bitmap bmp_dividor_m, bmp_dividor_a, bmp_dividor_e, bmp_dividor_n;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Settings() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Settings.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Settings newInstance(String param1, String param2) {
-        Settings fragment = new Settings();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_settings, container, false);
+
         main_layout = view.findViewById(R.id.settings_layout);
+        iv_dividor1 = view.findViewById(R.id.img_dividor1);
+        iv_dividor2 = view.findViewById(R.id.img_dividor2);
+        iv_dividor3 = view.findViewById(R.id.img_dividor3);;
+
+        bmp_dividor_m = BitmapFactory.decodeResource(getResources(),R.drawable.m_line);
+        bmp_dividor_a = BitmapFactory.decodeResource(getResources(),R.drawable.a_line);
+        bmp_dividor_e = BitmapFactory.decodeResource(getResources(),R.drawable.e_line);
+        bmp_dividor_n = BitmapFactory.decodeResource(getResources(),R.drawable.n_line);
+
         final Calendar[] rightNow = {Calendar.getInstance()};
         final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
             main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+            iv_dividor1.setImageBitmap(bmp_dividor_m);
+            iv_dividor2.setImageBitmap(bmp_dividor_m);
+            iv_dividor3.setImageBitmap(bmp_dividor_m);
         }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
             main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+            iv_dividor1.setImageBitmap(bmp_dividor_a);
+            iv_dividor2.setImageBitmap(bmp_dividor_a);
+            iv_dividor3.setImageBitmap(bmp_dividor_a);
         }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
             main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+            iv_dividor1.setImageBitmap(bmp_dividor_e);
+            iv_dividor2.setImageBitmap(bmp_dividor_e);
+            iv_dividor3.setImageBitmap(bmp_dividor_e);
         }else {
             main_layout.setBackgroundColor(Color.parseColor("#202020"));
+            iv_dividor1.setImageBitmap(bmp_dividor_n);
+            iv_dividor2.setImageBitmap(bmp_dividor_n);
+            iv_dividor3.setImageBitmap(bmp_dividor_n);
         }
 
         s_intentFilter = new IntentFilter();
@@ -99,12 +86,24 @@ public class Settings extends Fragment {
 
                     if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
                         main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
+                        iv_dividor1.setImageBitmap(bmp_dividor_m);
+                        iv_dividor2.setImageBitmap(bmp_dividor_m);
+                        iv_dividor3.setImageBitmap(bmp_dividor_m);
                     }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
                         main_layout.setBackgroundColor(Color.parseColor("#d63447"));
+                        iv_dividor1.setImageBitmap(bmp_dividor_a);
+                        iv_dividor2.setImageBitmap(bmp_dividor_a);
+                        iv_dividor3.setImageBitmap(bmp_dividor_a);
                     }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
                         main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
+                        iv_dividor1.setImageBitmap(bmp_dividor_e);
+                        iv_dividor2.setImageBitmap(bmp_dividor_e);
+                        iv_dividor3.setImageBitmap(bmp_dividor_e);
                     }else {
                         main_layout.setBackgroundColor(Color.parseColor("#202020"));
+                        iv_dividor1.setImageBitmap(bmp_dividor_n);
+                        iv_dividor2.setImageBitmap(bmp_dividor_n);
+                        iv_dividor3.setImageBitmap(bmp_dividor_n);
                     }
                 }
             }

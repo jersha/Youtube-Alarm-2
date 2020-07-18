@@ -1,142 +1,362 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settings_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#d63547"
+    tools:context=".Settings">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline38"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline39"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.96" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
 
-    <TextView
-        android:id="@+id/txt_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
-        android:text="Name       :"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="8pt"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline40" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline39"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
 
-    <TextView
-        android:id="@+id/txt_kw1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
-        android:text="Keyword 1 :"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="8pt"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline41" />
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Name       :"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txt_kw2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
-        android:text="Keyword 2 :"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="8pt"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline42" />
+        <ImageView
+            android:id="@+id/img_dividor1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/a_line"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_name" />
 
-    <TextView
-        android:id="@+id/txt_kw3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
-        android:text="Keyword 3 :"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="8pt"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline43" />
+        <ImageView
+            android:id="@+id/img_dividor2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/a_line"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw5" />
 
-    <TextView
-        android:id="@+id/txt_kw4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
-        android:text="Keyword 4 :"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="8pt"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline44" />
+        <ImageView
+            android:id="@+id/img_dividor3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/a_line"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/btn_snooze" />
 
-    <TextView
-        android:id="@+id/txt_kw5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
-        android:text="Keyword 5 :"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="8pt"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline45" />
+        <TextView
+            android:id="@+id/txt_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="ADDITIONAL SETTINGS"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="6pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/img_dividor3" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline40"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        <TextView
+            android:id="@+id/txt_ytube"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="YOUTUBE SETTINGS"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="6pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/img_dividor1" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline41"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        <TextView
+            android:id="@+id/txt_kw1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Keyword 1 :"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_ytube" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline42"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        <TextView
+            android:id="@+id/txt_kw2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Keyword 2 :"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw1" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline43"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25171" />
+        <TextView
+            android:id="@+id/txt_kw3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Keyword 3 :"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw2" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline44"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30232558" />
+        <TextView
+            android:id="@+id/txt_kw4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Keyword 4 :"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw3" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline45"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txt_kw5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Keyword 5 :"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw4" />
+
+        <TextView
+            android:id="@+id/txt_gen5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="GENERAL SETTINGS"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="6pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/img_dividor2" />
+
+        <TextView
+            android:id="@+id/txt_ringtone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Alarm ringtone"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_gen5" />
+
+        <TextView
+            android:id="@+id/txt_vol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arial"
+            android:text="Used when internet is not available"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="5pt"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_ringtone" />
+
+        <Button
+            android:id="@+id/btn_privacy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="50dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/arial"
+            android:text="Privacy policy"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_add" />
+
+        <Button
+            android:id="@+id/btn_snooze"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/arial"
+            android:text="Snooze"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/switch5" />
+
+        <Switch
+            android:id="@+id/switch5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/arial"
+            android:text="Notification before ringing"
+            android:textColor="#ffffff"
+            android:textSize="8pt"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toStartOf="@+id/guideline38"
+            app:layout_constraintTop_toBottomOf="@+id/txt_vol" />
+
+        <EditText
+            android:id="@+id/editText_Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:ems="10"
+            android:fontFamily="@font/arial"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/img_dividor1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/txt_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText_kw1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:ems="10"
+            android:fontFamily="@font/arial"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/txt_kw2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/txt_kw1"
+            app:layout_constraintTop_toBottomOf="@+id/txt_ytube" />
+
+        <EditText
+            android:id="@+id/editText_kw2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:ems="10"
+            android:fontFamily="@font/arial"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/txt_kw3"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/txt_kw2"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw1" />
+
+        <EditText
+            android:id="@+id/editText_kw3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:ems="10"
+            android:fontFamily="@font/arial"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/txt_kw4"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/txt_kw3"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw2" />
+
+        <EditText
+            android:id="@+id/editText_kw4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:ems="10"
+            android:fontFamily="@font/arial"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/txt_kw5"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintStart_toEndOf="@+id/txt_kw4"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw3" />
+
+        <EditText
+            android:id="@+id/editText_kw5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:ems="10"
+            android:fontFamily="@font/arial"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/img_dividor2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline39"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/txt_kw5"
+            app:layout_constraintTop_toBottomOf="@+id/txt_kw4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
