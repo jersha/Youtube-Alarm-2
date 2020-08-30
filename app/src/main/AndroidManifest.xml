@@ -21,8 +21,9 @@
         <activity
             android:name=".Locked_alarm"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity android:name=".popupActivity"></activity>
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".popupActivity" />
         <activity android:name=".Main1" />
         <activity
             android:name=".Main2"
@@ -34,7 +35,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

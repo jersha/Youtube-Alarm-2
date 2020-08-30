@@ -22,6 +22,7 @@ import java.util.Objects;
 public class popupActivity extends DialogFragment {
     SeekBar seekHour, seekMinute;
     TextView txtHour, txtMinute;
+    Button btn_ok, btb_cancel;
 
     public interface OnInputSelected{
         void sendInput(String input);
@@ -33,25 +34,34 @@ public class popupActivity extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_popup, null);
-        builder.setView(view)
-                .setTitle("Alarm Time")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String input = txtHour.getText().toString() + " : " + txtMinute.getText().toString();
-                        mOnInputSelected.sendInput(input);
-                    }
-                });
+
+        builder.setView(view);
 
         seekHour = view.findViewById(R.id.seekHour);
         seekMinute = view.findViewById(R.id.seekMinute);
         txtHour = view.findViewById(R.id.txtHourVal);
         txtMinute = view.findViewById(R.id.txtMinuteVal);
+        btn_ok = view.findViewById(R.id.btn_ok);
+        btb_cancel = view.findViewById(R.id.btn_cancel);
+
+        seekHour.setProgress(0);
+        seekMinute.setProgress(0);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String input = txtHour.getText().toString() + " : " + txtMinute.getText().toString();
+                mOnInputSelected.sendInput(input);
+                Objects.requireNonNull(getDialog()).dismiss();
+            }
+        });
+
+        btb_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Objects.requireNonNull(getDialog()).dismiss();
+            }
+        });
 
         seekHour.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

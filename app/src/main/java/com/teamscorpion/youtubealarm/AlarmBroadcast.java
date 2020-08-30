@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -17,12 +18,12 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.Calendar;
+
 public class AlarmBroadcast extends BroadcastReceiver {
 
     private String CHANNEL_ID = "channelId";
     String channelId = CHANNEL_ID;
-    String title = "Hi Jersha";
-    String description = "Good Morning.";
     Context context_global;
     Class destination;
     PendingIntent final_intent;
@@ -59,7 +60,26 @@ public class AlarmBroadcast extends BroadcastReceiver {
         Intent intent2 = new Intent(context_global, destination);
         // flags and request code are 0 for the purpose of demonstration
         final_intent = PendingIntent.getActivity(context_global, 0, intent2, 0);
-        Bitmap aLicon = BitmapFactory.decodeResource(context_global.getResources(),R.drawable.a_sticker);
+
+        Bitmap note_icon;
+        String description;
+
+        final Calendar[] rightNow = {Calendar.getInstance()};
+        final int[] currentHourIn24Format = {rightNow[0].get(Calendar.HOUR)};
+
+        final SharedPreferences clockSettings = context_global.getSharedPreferences("MyClockPreferences", 0);
+        String Name = clockSettings.getString("UserName", "");
+        String title = "Hi"+ Name;
+        note_icon = BitmapFactory.decodeResource(context_global.getResources(),R.drawable.notification_icon);
+        if(currentHourIn24Format[0] > 3 & currentHourIn24Format[0] < 12){
+            description = "Good Morning.";
+        }else if(currentHourIn24Format[0] > 11 & currentHourIn24Format[0] < 17){
+            description = "Good Afternoon.";
+        }else if(currentHourIn24Format[0] > 16 & currentHourIn24Format[0] < 21){
+            description = "Good Evening.";
+        }else {
+            description = "Good Night.";
+        }
 
         Intent intentSnooze = new Intent(context_global, NotificationActionService.class)
                 .setAction(ACTION_SNOOZE);
@@ -77,7 +97,7 @@ public class AlarmBroadcast extends BroadcastReceiver {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context_global);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context_global, channelId)
                 .setSmallIcon(R.drawable.ic_baseline_alarm_24)
-                .setLargeIcon(aLicon)
+                .setLargeIcon(note_icon)
                 .setContentTitle(title)
                 .setContentText(description)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

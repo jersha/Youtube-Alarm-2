@@ -14,11 +14,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -33,14 +31,10 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.Random;
 
-import android.app.NotificationManager;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.content.Context.ALARM_SERVICE;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,7 +46,6 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
     Bitmap morning, afternoon, evening, night;
     Bitmap morning_line, afternoon_line, evening_line, night_line;
     Bitmap morning_first, afternoon_first, evening_first, night_first;
-    Drawable[] btn_options_id, btn_add_id;
     ConstraintLayout main_layout;
     TextView Message, Date_id, Time_id;
     String[] quotes;
@@ -164,7 +157,10 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
         currentHourIn24Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
         currentMinute[0] = rightNow[0].get(Calendar.MINUTE);
         currentSecond[0] = rightNow[0].get(Calendar.SECOND);
-        Date = find_date(Arrays.toString(currentDate).replaceAll("\\[|\\]|,|\\s", "")) + "/" + find_month(Arrays.toString(currentMonth).replaceAll("\\[|\\]|,|\\s", "")) + "/" + Arrays.toString(currentYear).replaceAll("\\[|\\]|,|\\s", "") + ", " + find_day(Arrays.toString(currentDay).replaceAll("\\[|\\]|,|\\s", ""));
+        Date = find_date(Arrays.toString(currentDate).replaceAll("\\[|\\]|,|\\s", ""))
+                + "/" + find_month(Arrays.toString(currentMonth).replaceAll("\\[|\\]|,|\\s", ""))
+                + "/" + Arrays.toString(currentYear).replaceAll("\\[|\\]|,|\\s", "")
+                + ", " + find_day(Arrays.toString(currentDay).replaceAll("\\[|\\]|,|\\s", ""));
 
         if(currentHourIn24Format[0] < 10 && currentMinute[0] < 10){
             Time = "0" + currentHourIn24Format[0] + " : " + "0" + currentMinute[0];
@@ -179,18 +175,6 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
 
         Random r = new Random();
         random_no = r.nextInt(164);
-
-        btn_options_id = new Drawable[4];
-        btn_options_id[0] = ResourcesCompat.getDrawable(getResources(), R.drawable.m_settings_btn, null);
-        btn_options_id[1] = ResourcesCompat.getDrawable(getResources(), R.drawable.a_settings_btn, null);
-        btn_options_id[2] = ResourcesCompat.getDrawable(getResources(), R.drawable.e_settings_btn, null);
-        btn_options_id[3] = ResourcesCompat.getDrawable(getResources(), R.drawable.n_settings_btn, null);
-
-        btn_add_id = new Drawable[4];
-        btn_add_id[0] = ResourcesCompat.getDrawable(getResources(), R.drawable.m_add_btn, null);
-        btn_add_id[1] = ResourcesCompat.getDrawable(getResources(), R.drawable.a_add_btn, null);
-        btn_add_id[2] = ResourcesCompat.getDrawable(getResources(), R.drawable.e_add_btn, null);
-        btn_add_id[3] = ResourcesCompat.getDrawable(getResources(), R.drawable.n_add_btn, null);
 
         quotes = new String[164];
         quotes[0] = "Learn to value yourself, which means: fight for your happiness.";
@@ -680,10 +664,6 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
         NotificationManager notificationManager =
                 (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
-
-        SharedPreferences.Editor prefEditor = clockSettings.edit();
-        prefEditor.putString("Keyword", kw[0]);
-        prefEditor.apply();
 
         displayMessage(globalContext, "Alarm has been Set");
 
