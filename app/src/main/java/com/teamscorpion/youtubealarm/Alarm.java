@@ -86,16 +86,15 @@ public class Alarm extends Fragment {
         final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
             main_layout3.setBackgroundColor(Color.parseColor("#f3989d"));
-            add.setBackgroundColor(Color.parseColor("#f3989d"));
+            add.setImageResource(R.drawable.m_add);
         }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
             main_layout3.setBackgroundColor(Color.parseColor("#d63447"));
-            add.setBackgroundColor(Color.parseColor("#d63447"));
+            add.setImageResource(R.drawable.a_add);
         }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
             main_layout3.setBackgroundColor(Color.parseColor("#febc6e"));
-            add.setBackgroundColor(Color.parseColor("#febc6e"));
+            add.setImageResource(R.drawable.e_add);
         }else {
             main_layout3.setBackgroundColor(Color.parseColor("#202020"));
-            add.setBackgroundColor(Color.parseColor("#202020"));
             add.setImageResource(R.drawable.n_add);
         }
 
@@ -115,13 +114,13 @@ public class Alarm extends Fragment {
 
                     if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
                         main_layout3.setBackgroundColor(Color.parseColor("#f3989d"));
-                        add.setBackgroundColor(Color.parseColor("#f3989d"));
+                        add.setImageResource(R.drawable.m_add);
                     }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
                         main_layout3.setBackgroundColor(Color.parseColor("#d63447"));
-                        add.setBackgroundColor(Color.parseColor("#d63447"));
+                        add.setImageResource(R.drawable.a_add);
                     }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
                         main_layout3.setBackgroundColor(Color.parseColor("#febc6e"));
-                        add.setBackgroundColor(Color.parseColor("#febc6e"));
+                        add.setImageResource(R.drawable.e_add);
                     }else {
                         main_layout3.setBackgroundColor(Color.parseColor("#202020"));
                         add.setImageResource(R.drawable.n_add);

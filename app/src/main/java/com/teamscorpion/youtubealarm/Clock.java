@@ -1,10 +1,16 @@
 package com.teamscorpion.youtubealarm;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,20 +24,30 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Random;
+
+import android.app.NotificationManager;
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.content.Context.ALARM_SERVICE;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Clock#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Clock extends Fragment {
+public class Clock extends Fragment implements popupActivity.OnInputSelected{
     ImageView sticker, divider1, divider2, divider3;
     Bitmap morning, afternoon, evening, night;
     Bitmap morning_line, afternoon_line, evening_line, night_line;
@@ -43,11 +59,28 @@ public class Clock extends Fragment {
     int random_no;
     String Name, Date, Time;
     IntentFilter s_intentFilter;
-    Switch sw_one, sw_two, sw_three;
-    TextView fav_alarm1, fav_alarm2, fav_alarm3, fav_alarm4;
+    public  Switch sw_one, sw_two, sw_three, sw_four;
     TextView alarm_status;
     int fav_hr_1, fav_hr_2, fav_hr_3, fav_hr_4;
     int fav_min_1, fav_min_2, fav_min_3, fav_min_4;
+    String[] kw;
+    Context globalContext;
+
+    Button edit_alarm;
+
+    final Calendar[] rightNow = {Calendar.getInstance()};
+    final int[] currentHourIn24Format = {rightNow[0].get(Calendar.HOUR)};
+    final int[] currentMinute = {rightNow[0].get(Calendar.MINUTE)};
+    final int[] currentSecond = {rightNow[0].get(Calendar.SECOND)};
+    final int[] currentDay = {rightNow[0].get(Calendar.DAY_OF_WEEK)};
+    final int[] currentDate = {rightNow[0].get(Calendar.DAY_OF_MONTH)};
+    final int[] currentMonth = {rightNow[0].get(Calendar.MONTH)};
+    final int[] currentYear = {rightNow[0].get(Calendar.YEAR)};
+
+    final int MY_PERMISSIONS_REQUEST_ACCESS_NETWORK_STATE = 1;
+    final int MY_PERMISSIONS_REQUEST_INTERNET = 2;
+    final int MY_PERMISSIONS_USE_FULL_SCREEN_INTENT = 3;
+    final int MY_PERMISSIONS_WAKE_LOCK = 4;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,14 +120,17 @@ public class Clock extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        globalContext = this.getContext();
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_clock, container, false);
+
+        requestPermissions();
 
         sticker = view.findViewById(R.id.sticker);
         main_layout = view.findViewById(R.id.main_layout);
@@ -107,41 +143,38 @@ public class Clock extends Fragment {
         sw_one = view.findViewById(R.id.switch1);
         sw_two = view.findViewById(R.id.switch2);
         sw_three = view.findViewById(R.id.switch3);
-        fav_alarm1 = view.findViewById(R.id.fav_alarm1);
-        fav_alarm2 = view.findViewById(R.id.fav_alarm2);
-        fav_alarm3 = view.findViewById(R.id.fav_alarm3);
-        fav_alarm4 = view.findViewById(R.id.fav_alarm4);
+        sw_four = view.findViewById(R.id.switch4);
         alarm_status = view.findViewById(R.id.alarm_status);
+        edit_alarm = view.findViewById(R.id.btn_edit);
 
         final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+        kw = new String[5];
+        kw[0] = clockSettings.getString("KeyWord1", "");
+        kw[1] = clockSettings.getString("KeyWord2", "");
+        kw[2] = clockSettings.getString("KeyWord3", "");
+        kw[3] = clockSettings.getString("KeyWord4", "");
+        kw[4] = clockSettings.getString("KeyWord5", "");
 
         s_intentFilter = new IntentFilter();
         s_intentFilter.addAction(Intent.ACTION_TIME_TICK);
         s_intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         s_intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
 
-        final Calendar[] rightNow = {Calendar.getInstance()};
-        final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
-        final int[] currentHourIn12Format = {rightNow[0].get(Calendar.HOUR)};
-        final int[] currentMinute = {rightNow[0].get(Calendar.MINUTE)};
-        final int[] currentDay = {rightNow[0].get(Calendar.DAY_OF_WEEK)};
-        final int[] currentDate = {rightNow[0].get(Calendar.DAY_OF_MONTH)};
-        final int[] currentMonth = {rightNow[0].get(Calendar.MONTH)};
-        final int[] currentYear = {rightNow[0].get(Calendar.YEAR)};
         rightNow[0] = Calendar.getInstance();
-        currentHourIn12Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
+        currentHourIn24Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
         currentMinute[0] = rightNow[0].get(Calendar.MINUTE);
+        currentSecond[0] = rightNow[0].get(Calendar.SECOND);
         Date = find_date(Arrays.toString(currentDate).replaceAll("\\[|\\]|,|\\s", "")) + "/" + find_month(Arrays.toString(currentMonth).replaceAll("\\[|\\]|,|\\s", "")) + "/" + Arrays.toString(currentYear).replaceAll("\\[|\\]|,|\\s", "") + ", " + find_day(Arrays.toString(currentDay).replaceAll("\\[|\\]|,|\\s", ""));
 
-        if(currentHourIn12Format[0] < 10 && currentMinute[0] < 10){
-            Time = "0" + currentHourIn12Format[0] + " : " + "0" + currentMinute[0];
+        if(currentHourIn24Format[0] < 10 && currentMinute[0] < 10){
+            Time = "0" + currentHourIn24Format[0] + " : " + "0" + currentMinute[0];
         }
-        else if(currentHourIn12Format[0] < 10 && currentMinute[0] > 9){
-            Time = "0" + currentHourIn12Format[0] + " : " + currentMinute[0];
-        }else if(currentHourIn12Format[0] > 9 && currentMinute[0] < 10){
-            Time = currentHourIn12Format[0] + " : " + "0" + currentMinute[0];
+        else if(currentHourIn24Format[0] < 10 && currentMinute[0] > 9){
+            Time = "0" + currentHourIn24Format[0] + " : " + currentMinute[0];
+        }else if(currentHourIn24Format[0] > 9 && currentMinute[0] < 10){
+            Time = currentHourIn24Format[0] + " : " + "0" + currentMinute[0];
         }else{
-            Time = currentHourIn12Format[0] + " : " + currentMinute[0];
+            Time = currentHourIn24Format[0] + " : " + currentMinute[0];
         }
 
         Random r = new Random();
@@ -352,46 +385,46 @@ public class Clock extends Fragment {
         fav_min_3 = clockSettings.getInt("FavMin3", 30);
         fav_min_4 = clockSettings.getInt("FavMin4", 30);
         if(fav_hr_1 > 9 & fav_min_1 > 9){
-            fav_alarm1.setText(fav_hr_1 + " : " + fav_min_1);
+            sw_one.setText(fav_hr_1 + " : " + fav_min_1);
         }else if(fav_hr_1 < 10 & fav_min_1 < 10){
-            fav_alarm1.setText("0" + fav_hr_1 + " : " + "0" +fav_min_1);
+            sw_one.setText("0" + fav_hr_1 + " : " + "0" +fav_min_1);
         }else if(fav_hr_1 > 9 & fav_min_1 < 10){
-            fav_alarm1.setText(fav_hr_1 + " : " + "0" +fav_min_1);
+            sw_one.setText(fav_hr_1 + " : " + "0" +fav_min_1);
         }else{
-            fav_alarm1.setText("0" + fav_hr_1 + " : " + fav_min_1);
+            sw_one.setText("0" + fav_hr_1 + " : " + fav_min_1);
         }
 
         if(fav_hr_2 > 9 & fav_min_2 > 9){
-            fav_alarm2.setText(fav_hr_2 + " : " + fav_min_2);
+            sw_two.setText(fav_hr_2 + " : " + fav_min_2);
         }else if(fav_hr_2 < 10 & fav_min_2 < 10){
-            fav_alarm2.setText("0" + fav_hr_2 + " : " + "0" +fav_min_2);
+            sw_two.setText("0" + fav_hr_2 + " : " + "0" +fav_min_2);
         }else if(fav_hr_2 > 9 & fav_min_2 < 10){
-            fav_alarm2.setText(fav_hr_2 + " : " + "0" +fav_min_2);
+            sw_two.setText(fav_hr_2 + " : " + "0" +fav_min_2);
         }else{
-            fav_alarm2.setText("0" + fav_hr_2 + " : " + fav_min_2);
+            sw_two.setText("0" + fav_hr_2 + " : " + fav_min_2);
         }
 
         if(fav_hr_3 > 9 & fav_min_3 > 9){
-            fav_alarm3.setText(fav_hr_3 + " : " + fav_min_3);
+            sw_three.setText(fav_hr_3 + " : " + fav_min_3);
         }else if(fav_hr_3 < 10 & fav_min_3 < 10){
-            fav_alarm3.setText("0" + fav_hr_3 + " : " + "0" +fav_min_3);
+            sw_three.setText("0" + fav_hr_3 + " : " + "0" +fav_min_3);
         }else if(fav_hr_3 > 9 & fav_min_3 < 10){
-            fav_alarm3.setText(fav_hr_3 + " : " + "0" +fav_min_3);
+            sw_three.setText(fav_hr_3 + " : " + "0" +fav_min_3);
         }else{
-            fav_alarm3.setText("0" + fav_hr_3 + " : " + fav_min_3);
+            sw_three.setText("0" + fav_hr_3 + " : " + fav_min_3);
         }
 
         if(fav_hr_4 > 9 & fav_min_4 > 9){
-            fav_alarm4.setText(fav_hr_4 + " : " + fav_min_4);
+            sw_four.setText(fav_hr_4 + " : " + fav_min_4);
         }else if(fav_hr_4 < 10 & fav_min_4 < 10){
-            fav_alarm4.setText("0" + fav_hr_4 + " : " + "0" +fav_min_4);
+            sw_four.setText("0" + fav_hr_4 + " : " + "0" +fav_min_4);
         }else if(fav_hr_4 > 9 & fav_min_4 < 10){
-            fav_alarm4.setText(fav_hr_4 + " : " + "0" +fav_min_4);
+            sw_four.setText(fav_hr_4 + " : " + "0" +fav_min_4);
         }else{
-            fav_alarm4.setText("0" + fav_hr_4 + " : " + fav_min_4);
+            sw_four.setText("0" + fav_hr_4 + " : " + fav_min_4);
         }
 
-        enable_background(currentHourIn24Format, clockSettings);
+        enable_background(currentHourIn24Format[0], clockSettings);
 
         final BroadcastReceiver m_timeChangedReceiver = new BroadcastReceiver() {
             @Override
@@ -400,23 +433,23 @@ public class Clock extends Fragment {
                 assert action != null;
                 if (action.equals(Intent.ACTION_TIME_TICK)) {
                     rightNow[0] = Calendar.getInstance();
-                    final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
-                    currentHourIn12Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
+                    currentHourIn24Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
                     currentMinute[0] = rightNow[0].get(Calendar.MINUTE);
+                    currentSecond[0] = rightNow[0].get(Calendar.SECOND);
                     String Time_new;
-                    if(currentHourIn12Format[0] < 10 && currentMinute[0] < 10){
-                        Time_new = "0" + currentHourIn12Format[0] + " : " + "0" + currentMinute[0];
+                    if(currentHourIn24Format[0] < 10 && currentMinute[0] < 10){
+                        Time_new = "0" + currentHourIn24Format[0] + " : " + "0" + currentMinute[0];
                     }
-                    else if(currentHourIn12Format[0] < 10 && currentMinute[0] > 9){
-                        Time_new = "0" + currentHourIn12Format[0] + " : " + currentMinute[0];
-                    }else if(currentHourIn12Format[0] > 9 && currentMinute[0] < 10){
-                        Time_new = currentHourIn12Format[0] + " : " + "0" + currentMinute[0];
+                    else if(currentHourIn24Format[0] < 10 && currentMinute[0] > 9){
+                        Time_new = "0" + currentHourIn24Format[0] + " : " + currentMinute[0];
+                    }else if(currentHourIn24Format[0] > 9 && currentMinute[0] < 10){
+                        Time_new = currentHourIn24Format[0] + " : " + "0" + currentMinute[0];
                     }else{
-                        Time_new = currentHourIn12Format[0] + " : " + currentMinute[0];
+                        Time_new = currentHourIn24Format[0] + " : " + currentMinute[0];
                     }
                     Time_id.setText(Time_new);
 
-                    if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
+                    if(currentHourIn24Format[0] > 3 & currentHourIn24Format[0] < 12){
                         main_layout.setBackgroundColor(Color.parseColor("#f3989d"));
                         sticker.setImageBitmap(morning);
                         Message.setTextColor(Color.parseColor("#f2e3e4"));
@@ -424,7 +457,7 @@ public class Clock extends Fragment {
                         divider2.setImageBitmap(morning_line);
                         divider3.setImageBitmap(morning_line);
                         Message.setText("Hi"+Name+", Good Morning\n\n"+quotes[random_no]);
-                    }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
+                    }else if(currentHourIn24Format[0] > 11 & currentHourIn24Format[0] < 17){
                         main_layout.setBackgroundColor(Color.parseColor("#d63447"));
                         sticker.setImageBitmap(afternoon);
                         Message.setTextColor(Color.parseColor("#f9c3c3"));
@@ -432,7 +465,7 @@ public class Clock extends Fragment {
                         divider2.setImageBitmap(afternoon_line);
                         divider3.setImageBitmap(afternoon_line);
                         Message.setText("Hi"+Name+", Good Afternoon\n\n"+quotes[random_no]);
-                    }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
+                    }else if(currentHourIn24Format[0] > 16 & currentHourIn24Format[0] < 21){
                         main_layout.setBackgroundColor(Color.parseColor("#febc6e"));
                         sticker.setImageBitmap(evening);
                         Message.setTextColor(Color.parseColor("#ffffff"));
@@ -453,9 +486,73 @@ public class Clock extends Fragment {
             }
         };
 
+        sw_one.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String str_time = (String) sw_one.getText();
+                String str_hour=str_time.substring(0,2);
+                String str_minute=str_time.substring(5,7);
+                int int_hour=Integer.parseInt(str_hour);
+                int int_minute=Integer.parseInt(str_minute);
+                int notID1 = (int_hour * 100) + int_minute;
+                if(isChecked){
+                    setAlarm(notID1, int_hour, int_minute, clockSettings);
+                }else{
+                    resetAlarm(notID1);
+                }
+            }
+        });
+
+        edit_alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupActivity dialog = new popupActivity();
+                dialog.setTargetFragment(Clock.this, 1);
+                dialog.show(getFragmentManager(), "popupActivity");
+            }
+        });
+
         getActivity().registerReceiver(m_timeChangedReceiver, s_intentFilter);
 
         return view;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            displayMessage(getContext(),"Youtube Alarm will not work without this permission");
+        }
+        return;
+    }
+
+    private void requestPermissions(){
+        if (getContext().checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                    MY_PERMISSIONS_REQUEST_ACCESS_NETWORK_STATE);
+            return;
+        }
+
+        if (getContext().checkSelfPermission(Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                    MY_PERMISSIONS_REQUEST_INTERNET);
+            return;
+        }
+
+        if (getContext().checkSelfPermission(Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                    MY_PERMISSIONS_USE_FULL_SCREEN_INTENT);
+            return;
+        }
+
+        if (getContext().checkSelfPermission(Manifest.permission.WAKE_LOCK)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                    MY_PERMISSIONS_WAKE_LOCK);
+            return;
+        }
     }
 
     String find_day(String number){
@@ -540,6 +637,7 @@ public class Clock extends Fragment {
         return output;
     }
 
+    @SuppressLint("SetTextI18n")
     void enable_background(int currentHourIn24Format, SharedPreferences clockSettings){
         Name = clockSettings.getString("UserName", "");
 
@@ -576,5 +674,54 @@ public class Clock extends Fragment {
             divider3.setImageBitmap(night_line);
             Message.setText("Hi"+Name+", Good Night\n\n"+quotes[random_no]);
         }
+    }
+
+    void setAlarm(int notificationId, int hour, int minute, SharedPreferences clockSettings){
+        NotificationManager notificationManager =
+                (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+
+        SharedPreferences.Editor prefEditor = clockSettings.edit();
+        prefEditor.putString("Keyword", kw[0]);
+        prefEditor.apply();
+
+        displayMessage(globalContext, "Alarm has been Set");
+
+        Intent intent = new Intent(getContext(), AlarmBroadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getContext(), 0, intent, 0);
+
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+        Calendar c = Calendar.getInstance();
+
+        long timeAtButtonClick = System.currentTimeMillis();
+        long final_hour = hour - currentHourIn24Format[0];
+        long final_minute = minute - currentMinute[0];
+        long final_second = minute - currentSecond[0];
+        long total_min_alarm = (final_hour * 60) + final_minute;
+        long total_sec_alarm = (total_min_alarm * 60) + final_second;
+        long total_msec_alarm = total_sec_alarm * 1000;
+        if(total_msec_alarm < 0){
+            total_msec_alarm += 86400000;
+        }
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtButtonClick + total_msec_alarm, pendingIntent);
+    }
+
+    void resetAlarm(int notificationId){
+        Intent intent_stop = new Intent(getContext(), AlarmBroadcast.class);
+        AlarmManager alarmManager_stop = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(globalContext, notificationId, intent_stop, PendingIntent.FLAG_UPDATE_CURRENT|  Intent.FILL_IN_DATA);
+        alarmManager_stop.cancel(pendingIntent);
+    }
+
+    private void displayMessage(Context context, String message)
+    {
+        Toast.makeText(context,message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void sendInput(String input) {
+        sw_one.setText(input);
     }
 }

@@ -176,7 +176,7 @@ public class Main2 extends AppCompatActivity {
                     currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
 
                     if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
-                        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#202020"));
+                        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#f3989d"));
                         switch (tab_selected) {
                             case 0:
                                 tabLayout.setBackgroundResource(Tab_bg[0]);
@@ -189,6 +189,7 @@ public class Main2 extends AppCompatActivity {
                                 break;
                         }
                     }else if(currentHourIn24Format > 11 & currentHourIn24Format < 17){
+                        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#d63447"));
                         switch (tab_selected) {
                             case 0:
                                 tabLayout.setBackgroundResource(Tab_bg[3]);
@@ -201,6 +202,7 @@ public class Main2 extends AppCompatActivity {
                                 break;
                         }
                     }else if(currentHourIn24Format > 16 & currentHourIn24Format < 21){
+                        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#febc6e"));
                         switch (tab_selected) {
                             case 0:
                                 tabLayout.setBackgroundResource(Tab_bg[6]);
@@ -213,6 +215,7 @@ public class Main2 extends AppCompatActivity {
                                 break;
                         }
                     }else {
+                        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#202020"));
                         switch (tab_selected) {
                             case 0:
                                 tabLayout.setBackgroundResource(Tab_bg[9]);

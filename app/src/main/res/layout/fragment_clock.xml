@@ -104,32 +104,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.68" />
 
-    <TextView
-        android:id="@+id/fav_alarm2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:fontFamily="@font/arial"
-        android:text="05 : 30"
-        android:textColor="#ffffff"
-        android:textSize="10pt"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline12"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/guideline" />
-
-    <TextView
-        android:id="@+id/fav_alarm1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:fontFamily="@font/arial"
-        android:text="05 : 30"
-        android:textColor="#ffffff"
-        android:textSize="10pt"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline10"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/guideline3" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline14"
         android:layout_width="wrap_content"
@@ -162,38 +136,12 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.72" />
 
-    <TextView
-        android:id="@+id/fav_alarm3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:fontFamily="@font/arial"
-        android:text="06 : 30"
-        android:textColor="#ffffff"
-        android:textSize="10pt"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline50"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/guideline16" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
-
-    <TextView
-        android:id="@+id/fav_alarm4"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:fontFamily="@font/arial"
-        android:text="07 : 30"
-        android:textColor="#ffffff"
-        android:textSize="10pt"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline51"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/guideline17" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline18"
@@ -244,41 +192,56 @@
         android:id="@+id/switch2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorLink="#ffffff"
+        android:fontFamily="@font/arial"
+        android:text="05 : 30"
+        android:textColor="#ffffff"
+        android:textSize="10pt"
+        android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/guideline12"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toEndOf="@+id/guideline49"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorLink="#ffffff"
+        android:fontFamily="@font/arial"
+        android:text="04 : 30"
+        android:textColor="#ffffff"
+        android:textSize="10pt"
+        android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toEndOf="@+id/guideline49"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/guideline3" />
 
     <Switch
         android:id="@+id/switch3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorLink="#ffffff"
+        android:fontFamily="@font/arial"
+        android:text="06 : 30"
+        android:textColor="#ffffff"
+        android:textSize="10pt"
+        android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/guideline50"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toEndOf="@+id/guideline49"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/guideline16" />
 
     <Switch
         android:id="@+id/switch4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorHighlight="#ffffff"
-        android:textColorLink="#ffffff"
+        android:fontFamily="@font/arial"
+        android:text="07 : 30"
+        android:textColor="#ffffff"
+        android:textSize="10pt"
+        android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/guideline51"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toEndOf="@+id/guideline49"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/guideline17" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -345,13 +308,6 @@
         app:layout_constraintGuide_percent="0.55403554" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline49"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.84" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -371,5 +327,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9110807" />
+
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/guideline14"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/guideline13"
+        app:layout_constraintTop_toTopOf="@+id/guideline35"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
