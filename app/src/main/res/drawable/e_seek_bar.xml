@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background" android:drawable="@drawable/e_round2"/>
+    <item android:id="@android:id/progress" tools:ignore="StateListReachable">
+        <scale android:scaleWidth="100%">
+            <selector>
+                <item android:drawable="@drawable/e_round"/>
+            </selector>
+        </scale>
+    </item>
+</layer-list>

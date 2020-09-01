@@ -96,4 +96,6 @@
     <string name="snooze">SNOOZE</string>
     <string name="stop">STOP</string>
     <string name="alarm_time">Alarm Time</string>
+    <string name="minute">Minute</string>
+    <string name="_00">00</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple
     xmlns:android = "http://schemas.android.com/apk/res/android"
-    android:color="#fbdbab">
-    <item android:drawable="@drawable/e_ok">
+    android:color="#272727">
+    <item android:drawable="@drawable/n_ok">
     </item>
 </ripple>

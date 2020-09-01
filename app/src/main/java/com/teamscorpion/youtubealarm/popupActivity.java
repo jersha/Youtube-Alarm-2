@@ -9,20 +9,24 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 public class popupActivity extends DialogFragment {
     SeekBar seekHour, seekMinute;
     TextView txtHour, txtMinute;
-    Button btn_ok, btb_cancel;
+    Button btn_ok, btn_cancel;
 
     public interface OnInputSelected{
         void sendInput(String input);
@@ -42,10 +46,46 @@ public class popupActivity extends DialogFragment {
         txtHour = view.findViewById(R.id.txtHourVal);
         txtMinute = view.findViewById(R.id.txtMinuteVal);
         btn_ok = view.findViewById(R.id.btn_ok);
-        btb_cancel = view.findViewById(R.id.btn_cancel);
+        btn_cancel = view.findViewById(R.id.btn_cancel);
 
         seekHour.setProgress(0);
         seekMinute.setProgress(0);
+
+        final Calendar[] rightNow = {Calendar.getInstance()};
+        final int[] currentHourIn24Format = {rightNow[0].get(Calendar.HOUR)};
+        if(currentHourIn24Format[0] > 3 & currentHourIn24Format[0] < 12){
+            view.setBackgroundColor(Color.parseColor("#f3989d"));
+            btn_ok.setBackgroundResource(R.drawable.m_ok_ripple);
+            btn_cancel.setBackgroundResource(R.drawable.m_cancel_ripple);
+            Drawable draw_hr= getResources().getDrawable(R.drawable.m_seek_bar, null);
+            Drawable draw_min= getResources().getDrawable(R.drawable.m_seek_bar, null);
+            seekHour.setProgressDrawable(draw_hr);
+            seekMinute.setProgressDrawable(draw_min);
+        }else if(currentHourIn24Format[0] > 11 & currentHourIn24Format[0] < 17){
+            view.setBackgroundColor(Color.parseColor("#d63447"));
+            btn_ok.setBackgroundResource(R.drawable.a_ok_ripple);
+            btn_cancel.setBackgroundResource(R.drawable.a_cancel_ripple);
+            Drawable draw_hr= getResources().getDrawable(R.drawable.a_seek_bar, null);
+            Drawable draw_min= getResources().getDrawable(R.drawable.a_seek_bar, null);
+            seekHour.setProgressDrawable(draw_hr);
+            seekMinute.setProgressDrawable(draw_min);
+        }else if(currentHourIn24Format[0] > 16 & currentHourIn24Format[0] < 21){
+            view.setBackgroundColor(Color.parseColor("#febc6e"));
+            btn_ok.setBackgroundResource(R.drawable.e_ok_ripple);
+            btn_cancel.setBackgroundResource(R.drawable.e_cancel_ripple);
+            Drawable draw_hr= getResources().getDrawable(R.drawable.e_seek_bar, null);
+            Drawable draw_min= getResources().getDrawable(R.drawable.e_seek_bar, null);
+            seekHour.setProgressDrawable(draw_hr);
+            seekMinute.setProgressDrawable(draw_min);
+        }else {
+            view.setBackgroundColor(Color.parseColor("#202020"));
+            btn_ok.setBackgroundResource(R.drawable.n_ok_ripple);
+            btn_cancel.setBackgroundResource(R.drawable.n_cancel_ripple);
+            Drawable draw_hr= getResources().getDrawable(R.drawable.n_seek_bar, null);
+            Drawable draw_min= getResources().getDrawable(R.drawable.n_seek_bar, null);
+            seekHour.setProgressDrawable(draw_hr);
+            seekMinute.setProgressDrawable(draw_min);
+        }
 
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +96,7 @@ public class popupActivity extends DialogFragment {
             }
         });
 
-        btb_cancel.setOnClickListener(new View.OnClickListener() {
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Objects.requireNonNull(getDialog()).dismiss();

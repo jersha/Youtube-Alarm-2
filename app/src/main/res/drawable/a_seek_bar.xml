@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/background" android:drawable="@drawable/round1"/>
+    <item android:id="@android:id/background" android:drawable="@drawable/a_round2"/>
     <item android:id="@android:id/progress" tools:ignore="StateListReachable">
         <scale android:scaleWidth="100%">
             <selector>
+                <item android:drawable="@drawable/a_round"/>
             </selector>
         </scale>
     </item>
