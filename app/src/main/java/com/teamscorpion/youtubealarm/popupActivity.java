@@ -37,7 +37,7 @@ public class popupActivity extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
-        View view = inflater.inflate(R.layout.activity_popup, null);
+        View view = inflater.inflate(R.layout.activity_popup_alarm, null);
 
         builder.setView(view);
 
@@ -53,6 +53,8 @@ public class popupActivity extends DialogFragment {
 
         final Calendar[] rightNow = {Calendar.getInstance()};
         final int[] currentHourIn24Format = {rightNow[0].get(Calendar.HOUR)};
+        rightNow[0] = Calendar.getInstance();
+        currentHourIn24Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format[0] > 3 & currentHourIn24Format[0] < 12){
             view.setBackgroundColor(Color.parseColor("#f3989d"));
             btn_ok.setBackgroundResource(R.drawable.m_ok_ripple);

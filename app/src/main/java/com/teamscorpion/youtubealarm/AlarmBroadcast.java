@@ -66,6 +66,8 @@ public class AlarmBroadcast extends BroadcastReceiver {
 
         final Calendar[] rightNow = {Calendar.getInstance()};
         final int[] currentHourIn24Format = {rightNow[0].get(Calendar.HOUR)};
+        rightNow[0] = Calendar.getInstance();
+        currentHourIn24Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
 
         final SharedPreferences clockSettings = context_global.getSharedPreferences("MyClockPreferences", 0);
         String Name = clockSettings.getString("UserName", "");

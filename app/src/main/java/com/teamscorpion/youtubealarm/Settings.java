@@ -2,12 +2,14 @@ package com.teamscorpion.youtubealarm;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,6 +20,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -28,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -52,8 +56,10 @@ public class Settings extends Fragment {
     Bitmap bmp_dividor_m, bmp_dividor_a, bmp_dividor_e, bmp_dividor_n;
     String Name, kw1, kw2, kw3, kw4, kw5;
     EditText etxt_name, etxt_kw1, etxt_kw2, etxt_kw3, etxt_kw4, etxt_kw5;
-    Button btn_ringtone;
+    Button btn_ringtone, btn_privacy;
+    Switch sw_notification;
     Uri audio;
+    Boolean notification;
     static final int SELECT_AUDIO_REQUEST = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -75,14 +81,18 @@ public class Settings extends Fragment {
         iv_dividor2 = view.findViewById(R.id.img_dividor2);
         iv_dividor3 = view.findViewById(R.id.img_dividor3);
         btn_ringtone = view.findViewById(R.id.btn_ringtone);
+        btn_privacy = view.findViewById(R.id.btn_privacy);
+        sw_notification = view.findViewById(R.id.sw_notification);
 
-        final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+        final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
         Name = clockSettings.getString("UserName", "");
         kw1 = clockSettings.getString("KeyWord1", "");
         kw2 = clockSettings.getString("KeyWord2", "");
         kw3 = clockSettings.getString("KeyWord3", "");
         kw4 = clockSettings.getString("KeyWord4", "");
         kw5 = clockSettings.getString("KeyWord5", "");
+        notification = clockSettings.getBoolean("notify", true);
+        String displayName = clockSettings.getString("displayName", "null");
 
         etxt_name.setText(Name);
         etxt_kw1.setText(kw1);
@@ -90,7 +100,13 @@ public class Settings extends Fragment {
         etxt_kw3.setText(kw3);
         etxt_kw4.setText(kw4);
         etxt_kw5.setText(kw5);
-        btn_ringtone.setText(Html.fromHtml("Alarm ringtone<br/><small>used when Phone is not connected to internet</small>"));
+        assert displayName != null;
+        if(displayName.equals("null")){
+            btn_ringtone.setText(Html.fromHtml("Alarm ringtone<br/><small>used when Phone is not connected to internet</small>"));
+        }else{
+            btn_ringtone.setText( Html.fromHtml("Alarm ringtone<br/><small>" + displayName));
+        }
+        sw_notification.setChecked(notification);
 
         bmp_dividor_m = BitmapFactory.decodeResource(getResources(),R.drawable.m_line);
         bmp_dividor_a = BitmapFactory.decodeResource(getResources(),R.drawable.a_line);
@@ -176,10 +192,45 @@ public class Settings extends Fragment {
             }
         });
 
+        sw_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(notification){
+                    notification = false;
+                    sw_notification.setChecked(false);
+                    final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
+                    SharedPreferences.Editor prefEditor = clockSettings.edit();
+                    prefEditor.putBoolean("notify", false);
+                    prefEditor.apply();
+                }else {
+                    notification = true;
+                    sw_notification.setChecked(true);
+                    final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
+                    SharedPreferences.Editor prefEditor = clockSettings.edit();
+                    prefEditor.putBoolean("notify", true);
+                    prefEditor.apply();
+                }
+            }
+        });
+
+        btn_privacy.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/document/d/1cYB8_FHu5GQoJ-j6bCX0DDCb22p8O4TLjAU8aeCySwo/edit?usp=sharing"));
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(), "No application can handle this request."
+                            + " Please install a webbrowser",  Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }));
+
         etxt_name.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 String name = etxt_name.getText().toString();
-                final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+                final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putString("UserName", name);
                 prefEditor.apply();
@@ -191,7 +242,7 @@ public class Settings extends Fragment {
         etxt_kw1.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 String kw1 = etxt_kw1.getText().toString();
-                final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+                final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putString("KeyWord1", kw1);
                 prefEditor.apply();
@@ -203,7 +254,7 @@ public class Settings extends Fragment {
         etxt_kw2.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 String kw2 = etxt_kw2.getText().toString();
-                final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+                final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putString("KeyWord2", kw2);
                 prefEditor.apply();
@@ -215,7 +266,7 @@ public class Settings extends Fragment {
         etxt_kw3.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 String kw3 = etxt_kw3.getText().toString();
-                final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+                final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putString("KeyWord3", kw3);
                 prefEditor.apply();
@@ -227,7 +278,7 @@ public class Settings extends Fragment {
         etxt_kw4.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 String kw4 = etxt_kw4.getText().toString();
-                final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+                final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putString("KeyWord4", kw4);
                 prefEditor.apply();
@@ -239,7 +290,7 @@ public class Settings extends Fragment {
         etxt_kw5.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 String kw5 = etxt_kw5.getText().toString();
-                final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+                final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putString("KeyWord5", kw5);
                 prefEditor.apply();
@@ -252,14 +303,14 @@ public class Settings extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         String name = etxt_name.getText().toString();
         String kw1 = etxt_kw1.getText().toString();
         String kw2 = etxt_kw2.getText().toString();
         String kw3 = etxt_kw3.getText().toString();
         String kw4 = etxt_kw4.getText().toString();
         String kw5 = etxt_kw5.getText().toString();
-        final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
+        final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
         SharedPreferences.Editor prefEditor = clockSettings.edit();
         prefEditor.putString("UserName", name);
         prefEditor.putString("KeyWord1", kw1);
@@ -281,12 +332,19 @@ public class Settings extends Fragment {
         /*check whether you're working on correct request using requestCode , In this case 1*/
 
         if(requestCode == SELECT_AUDIO_REQUEST && resultCode == Activity.RESULT_OK){
-            audio = data.getData(); //declared above Uri audio;
-            Log.d("media", "onActivityResult: "+audio);
+            audio = data.getData();
+            String displayName = getName(audio);
+            btn_ringtone.setText(Html.fromHtml("Alarm ringtone<br/><small>" + displayName));
+
+            final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
+            SharedPreferences.Editor prefEditor = clockSettings.edit();
+            prefEditor.putString("alarm_uri", audio.toString());
+            prefEditor.putString("displayName", displayName);
+            prefEditor.apply();
 
             MediaPlayer playerM = new MediaPlayer();
             try {
-                playerM.setDataSource(getContext(), audio);
+                playerM.setDataSource(Objects.requireNonNull(getContext()), audio);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -319,13 +377,35 @@ public class Settings extends Fragment {
     }
 
     private void selectAudio() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             final Intent select_audio = new Intent(Intent.ACTION_GET_CONTENT);
             select_audio.setType("audio/*");
             startActivityForResult(select_audio,SELECT_AUDIO_REQUEST);
         } else {
             displayMessage(Objects.requireNonNull(getActivity()).getBaseContext(), "I can't ring the alarm without storage permission");
         }
+    }
+
+    private String getName(Uri uri){
+        assert uri != null;
+        String uriString = uri.toString();
+        File myFile = new File(uriString);
+        String path = myFile.getAbsolutePath();
+        String displayName = null;
+        if (uriString.startsWith("content://")) {
+            Cursor cursor = null;
+            try {
+                cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        } else if (uriString.startsWith("file://")) {
+            displayName = myFile.getName();
+        }
+        return displayName;
     }
 }

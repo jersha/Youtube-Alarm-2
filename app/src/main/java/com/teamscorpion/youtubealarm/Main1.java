@@ -82,7 +82,7 @@ public class Main1 extends AppCompatActivity {
                 prefEditor.putString("UserName", ip_name);
                 prefEditor.putString("KeyWord1", ip_kw1);
                 prefEditor.putString("KeyWord2", ip_kw2);
-                prefEditor.putBoolean("my_first_time", false);
+                prefEditor.putBoolean("notify", true);
                 prefEditor.apply();
                 startActivity(intent);
                 finish();

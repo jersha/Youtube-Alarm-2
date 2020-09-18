@@ -236,10 +236,10 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline39"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline38"
-            app:layout_constraintTop_toBottomOf="@+id/switch5" />
+            app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
 
         <Switch
-            android:id="@+id/switch5"
+            android:id="@+id/sw_notification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
