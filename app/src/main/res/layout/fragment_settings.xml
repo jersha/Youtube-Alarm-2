@@ -68,7 +68,7 @@
             android:src="@drawable/a_line"
             app:layout_constraintEnd_toStartOf="@+id/guideline39"
             app:layout_constraintStart_toEndOf="@+id/guideline38"
-            app:layout_constraintTop_toBottomOf="@+id/btn_snooze" />
+            app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
 
         <TextView
             android:id="@+id/txt_add"
@@ -219,24 +219,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline38"
             app:layout_constraintTop_toBottomOf="@+id/txt_add" />
-
-        <Button
-            android:id="@+id/btn_snooze"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/arial"
-            android:text="Snooze"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textSize="8pt"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toStartOf="@+id/guideline39"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline38"
-            app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
 
         <Switch
             android:id="@+id/sw_notification"

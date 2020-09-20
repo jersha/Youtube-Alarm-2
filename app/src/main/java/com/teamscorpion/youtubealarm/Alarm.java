@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,10 +21,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +45,25 @@ public class Alarm extends Fragment implements popupActivity.OnInputSelected{
     FloatingActionButton add;
     final Calendar[] rightNow = {Calendar.getInstance()};
     final int currentHourIn24Format = rightNow[0].get(Calendar.HOUR_OF_DAY);
+    int total;
 
+    public class AlarmTimes {
+        public String m_time;
+        public int m_value;
+        public Boolean m_fav;
+
+        public void findValue(){
+            int one = Integer.parseInt(m_time.substring(0, 2)) * 100;
+            int two = Integer.parseInt(m_time.substring(5, 7));
+            this.m_value = one + two;
+        }
+
+        public AlarmTimes(String input, boolean favourite){
+            this.m_time = input;
+            this.m_fav = favourite;
+        }
+    }
+    ArrayList<AlarmTimes> alarmtimes;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -103,6 +127,23 @@ public class Alarm extends Fragment implements popupActivity.OnInputSelected{
             add.setImageResource(R.drawable.n_add);
         }
 
+        final SharedPreferences clockSettings = Objects.requireNonNull(getActivity()).getSharedPreferences("MyClockPreferences", 0);
+        total = clockSettings.getInt("Total", 0);
+        alarmtimes = new ArrayList<AlarmTimes>();
+        if(total > 0){
+            for(int loop = 0; loop < total; loop++) {
+                String int_str = String.valueOf(loop);
+                boolean fav = clockSettings.getBoolean("Fav" + int_str, false);
+                String final_str = "Time" + int_str;
+                String time = clockSettings.getString(final_str, "null");
+                AlarmTimes temporary = new AlarmTimes(time, fav);
+                temporary.findValue();
+                alarmtimes.add(temporary);
+
+                createAlarm(temporary.m_time, temporary.m_fav);
+            }
+        }
+
         s_intentFilter = new IntentFilter();
         s_intentFilter.addAction(Intent.ACTION_TIME_TICK);
         s_intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
@@ -139,22 +180,47 @@ public class Alarm extends Fragment implements popupActivity.OnInputSelected{
             public void onClick(View view) {
                 popupActivity dialog = new popupActivity();
                 dialog.setTargetFragment(Alarm.this, 1);
+                assert getFragmentManager() != null;
                 dialog.show(getFragmentManager(), "popupActivity");
             }
         });
 
-        getActivity().registerReceiver(m_timeChangedReceiver, s_intentFilter);
+        Objects.requireNonNull(getActivity()).registerReceiver(m_timeChangedReceiver, s_intentFilter);
 
         return view;
     }
 
     int text1_id = 0;
     int sw_id = 100;
-    int text2_id = 1000;
-    int line_id = 10000;
+    int btn_id = 1000;
+    int text2_id = 10000;
+    int line_id = 100000;
 
     @Override
     public void sendInput(String input)  {
+        AlarmTimes temporary = new AlarmTimes(input, false);
+        temporary.findValue();
+        alarmtimes.add(temporary);
+        total++;
+
+        Collections.sort(alarmtimes, new Comparator<AlarmTimes>() {
+            @Override
+            public int compare(AlarmTimes time1, AlarmTimes time2) {
+                if(time1.m_value > time2.m_value) return 1;
+                else if(time1.m_value < time2.m_value) return -1;
+                else return 0;
+            }
+        });
+
+        main_layout1.removeAllViews();
+        main_layout1.invalidate();
+
+        for(int loop = 0; loop < total; loop++){
+            createAlarm(alarmtimes.get(loop).m_time, alarmtimes.get(loop).m_fav);
+        }
+    }
+
+    void createAlarm(String input, Boolean favourite){
         final TextView text1 = new TextView(getContext());
         ConstraintLayout.LayoutParams txt1_params = new ConstraintLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -165,20 +231,23 @@ public class Alarm extends Fragment implements popupActivity.OnInputSelected{
         if(text1_id != 1){
             txt1_params.topToBottom = line_id;
         }
-        main_layout1.addView(text1, txt1_params);
 
-        final Switch sw_alarm = new Switch(getContext());
-        sw_alarm.setText(input);
-        sw_id += 1;
-        ConstraintLayout.LayoutParams sw_params = new ConstraintLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
+        final Button btn_fav = new Button(getContext());
+        if(favourite){
+            btn_fav.setBackgroundResource(R.drawable.favourite_sel);
+        }else{
+            btn_fav.setBackgroundResource(R.drawable.favourite);
+        }
+        btn_id += 1;
+        ConstraintLayout.LayoutParams btn_params = new ConstraintLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        sw_params.setMargins(32,0,32,0);
-        sw_params.topToBottom = text1_id;
-        sw_alarm.setId(sw_id);
-        sw_alarm.setTextColor(Color.parseColor("#ffffff"));
-        sw_alarm.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
-        main_layout1.addView(sw_alarm, sw_params);
+        btn_params.setMargins(32,0,32,0);
+        btn_params.topToBottom = text1_id;
+        btn_params.startToStart = 0;
+        btn_params.height = 50;
+        btn_params.width = 50;
+        btn_fav.setId(btn_id);
 
         final TextView text2 = new TextView(getContext());
         ConstraintLayout.LayoutParams txt2_params = new ConstraintLayout.LayoutParams(
@@ -186,9 +255,23 @@ public class Alarm extends Fragment implements popupActivity.OnInputSelected{
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         text2_id += 1;
         text2.setId(text2_id);
+        txt2_params.topToBottom = btn_id;
         text2.setText("");
-        txt2_params.topToBottom = sw_id;
-        main_layout1.addView(text2, txt2_params);
+
+        final Switch sw_alarm = new Switch(getContext());
+        sw_alarm.setText(input + "                                           ");
+        sw_id += 1;
+        ConstraintLayout.LayoutParams sw_params = new ConstraintLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        sw_params.setMargins(32,0,32,0);
+        sw_params.topToBottom = text1_id;
+        sw_params.bottomToTop = text2_id;
+        sw_params.endToEnd = 0;
+        sw_params.startToEnd = btn_id;
+        sw_alarm.setId(sw_id);
+        sw_alarm.setTextColor(Color.parseColor("#ffffff"));
+        sw_alarm.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
 
         final ImageView dividor = new ImageView(getContext());
         if(currentHourIn24Format > 3 & currentHourIn24Format < 12){
@@ -206,6 +289,11 @@ public class Alarm extends Fragment implements popupActivity.OnInputSelected{
         line_params.topToBottom = text2_id;
         line_id += 1;
         dividor.setId(line_id);
+
+        main_layout1.addView(text1, txt1_params);
+        main_layout1.addView(btn_fav, btn_params);
+        main_layout1.addView(text2, txt2_params);
+        main_layout1.addView(sw_alarm, sw_params);
         main_layout1.addView(dividor, line_params);
     }
 }

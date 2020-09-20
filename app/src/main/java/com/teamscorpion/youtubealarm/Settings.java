@@ -13,9 +13,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -24,7 +22,6 @@ import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +42,10 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Settings extends Fragment {
+public class Settings extends Fragment{
     ConstraintLayout main_layout;
     IntentFilter s_intentFilter;
     ImageView iv_dividor1, iv_dividor2, iv_dividor3;

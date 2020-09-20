@@ -335,9 +335,11 @@ public class Locked_alarm extends YouTubeBaseActivity {
         turnScreenOnAndKeyguardOff();
 
         keyword = clockSettings.getString("KeyWord" + String.valueOf(random_no_kw), "null");
+        assert keyword != null;
         if(keyword.equals("null")){
             keyword = clockSettings.getString("KeyWord1", "null");
         }
+        assert keyword != null;
         if(!keyword.equals("null")) {
             keyword.replace(' ', '+');
         }else{
@@ -345,6 +347,7 @@ public class Locked_alarm extends YouTubeBaseActivity {
         }
 
         str_uri = clockSettings.getString("Uri", "null");
+        assert str_uri != null;
         File file = new File(str_uri);
         if (!file.exists()) {
             uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.alarm);
@@ -362,7 +365,7 @@ public class Locked_alarm extends YouTubeBaseActivity {
         StrictMode.setThreadPolicy(policy);
         final String[] finaloutput = new String[11];
 
-        if (keyword != "null") {
+        if (!keyword.equals("null")) {
             try {
                 Document doc  = Jsoup.connect(search).timeout(60000).get();
                 String input = doc.toString();
@@ -374,35 +377,29 @@ public class Locked_alarm extends YouTubeBaseActivity {
                         firstindex = output.indexOf("\"");
                         finaloutput[count] = output.substring(0, firstindex);
                         input = output.substring(firstindex + 1);
-                    }else{
-                        continue;
                     }
                 }
                 total = count - 1;
-                if(total != -1){
-                    Random rand = new Random();
-                    int rand_int1 = rand.nextInt(total);
-                    videoId = finaloutput[rand_int1];
-                    mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtubePlay);
-                    final String finalVideoId = videoId;
-                    mOnInitializedListener = new YouTubePlayer.OnInitializedListener() {
-                        @Override
-                        public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                            youTubePlayer_final = youTubePlayer;
-                            youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
-                            youTubePlayer.loadVideo(finalVideoId);
-                            youTubePlayer.play();
-                        }
+                Random rand = new Random();
+                int rand_int1 = rand.nextInt(total);
+                videoId = finaloutput[rand_int1];
+                mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtubePlay);
+                final String finalVideoId = videoId;
+                mOnInitializedListener = new YouTubePlayer.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                        youTubePlayer_final = youTubePlayer;
+                        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
+                        youTubePlayer.loadVideo(finalVideoId);
+                        youTubePlayer.play();
+                    }
 
-                        @Override
-                        public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-                            player.start();
-                        }
-                    };
-                    mYouTubePlayerView.initialize(YouTubeConfig.getApiKey(), mOnInitializedListener);
-                }else{
-                    player.start();
-                }
+                    @Override
+                    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                        player.start();
+                    }
+                };
+                mYouTubePlayerView.initialize(YouTubeConfig.getApiKey(), mOnInitializedListener);
             } catch (IOException e) {
                 player.start();
             }

@@ -41,6 +41,7 @@ import static android.content.Context.ALARM_SERVICE;
  * Use the {@link Clock#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class Clock extends Fragment implements popupActivity.OnInputSelected{
     ImageView sticker, divider1, divider2, divider3;
     Bitmap morning, afternoon, evening, night;
@@ -54,12 +55,22 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
     IntentFilter s_intentFilter;
     public  Switch sw_one, sw_two, sw_three, sw_four;
     TextView alarm_status;
-    int fav_hr_1, fav_hr_2, fav_hr_3, fav_hr_4;
-    int fav_min_1, fav_min_2, fav_min_3, fav_min_4;
-    String[] kw;
     Context globalContext;
-
     Button edit_alarm;
+
+    public class Alarm {
+        public String m_time;
+        public int m_value;
+        public Boolean m_fav;
+
+        public void findValue(){
+            this.m_value = (Integer.parseInt(m_time.substring(0, 1)) * 100) + Integer.parseInt(m_time.substring(5, 6));
+        }
+
+        public Alarm(String input){
+            this.m_time = input;
+        }
+    }
 
     final Calendar[] rightNow = {Calendar.getInstance()};
     final int[] currentHourIn24Format = {rightNow[0].get(Calendar.HOUR)};
@@ -141,12 +152,44 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
         edit_alarm = view.findViewById(R.id.btn_edit);
 
         final SharedPreferences clockSettings = getActivity().getSharedPreferences("MyClockPreferences", 0);
-        kw = new String[5];
-        kw[0] = clockSettings.getString("KeyWord1", "");
-        kw[1] = clockSettings.getString("KeyWord2", "");
-        kw[2] = clockSettings.getString("KeyWord3", "");
-        kw[3] = clockSettings.getString("KeyWord4", "");
-        kw[4] = clockSettings.getString("KeyWord5", "");
+        int total = clockSettings.getInt("Total", 0);
+        int favourite = 0;
+        Alarm[] alarms = new Alarm[4];
+        if(total > 0){
+            for(int loop = 0; loop < total; loop++){
+                String int_str = String.valueOf(loop);
+                boolean fav = clockSettings.getBoolean("Fav" + int_str, false);
+                if(fav){
+                    String final_str = "Time" + int_str;
+                    String time = clockSettings.getString(final_str, "null");
+                    alarms[favourite] = new Alarm(time);
+                    alarms[favourite].findValue();
+                    favourite++;
+                }
+            }
+            switch(favourite){
+                case 0:
+                    break;
+                case 1:
+                    sw_one.setText(alarms[0].m_time);
+                    break;
+                case 2:
+                    sw_one.setText(alarms[0].m_time);
+                    sw_two.setText(alarms[1].m_time);
+                    break;
+                case 3:
+                    sw_one.setText(alarms[0].m_time);
+                    sw_two.setText(alarms[1].m_time);
+                    sw_three.setText(alarms[2].m_time);
+                    break;
+                case 4:
+                    sw_one.setText(alarms[0].m_time);
+                    sw_two.setText(alarms[1].m_time);
+                    sw_three.setText(alarms[2].m_time);
+                    sw_four.setText(alarms[3].m_time);
+                    break;
+            }
+        }
 
         s_intentFilter = new IntentFilter();
         s_intentFilter.addAction(Intent.ACTION_TIME_TICK);
@@ -174,7 +217,7 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
         }
 
         Random r = new Random();
-        random_no = r.nextInt(164);
+        random_no = r.nextInt(151);
 
         quotes = new String[164];
         quotes[0] = "Learn to value yourself, which means: fight for your happiness.";
@@ -348,54 +391,6 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
         Date_id.setText(Date);
         Time_id.setText(Time);
 
-        fav_hr_1 = clockSettings.getInt("FavHr1", 4);
-        fav_hr_2 = clockSettings.getInt("FavHr2", 5);
-        fav_hr_3 = clockSettings.getInt("FavHr3", 6);
-        fav_hr_4 = clockSettings.getInt("FavHr4", 7);
-        fav_min_1 = clockSettings.getInt("FavMin1", 30);
-        fav_min_2 = clockSettings.getInt("FavMin2", 30);
-        fav_min_3 = clockSettings.getInt("FavMin3", 30);
-        fav_min_4 = clockSettings.getInt("FavMin4", 30);
-        if(fav_hr_1 > 9 & fav_min_1 > 9){
-            sw_one.setText(fav_hr_1 + " : " + fav_min_1);
-        }else if(fav_hr_1 < 10 & fav_min_1 < 10){
-            sw_one.setText("0" + fav_hr_1 + " : " + "0" +fav_min_1);
-        }else if(fav_hr_1 > 9 & fav_min_1 < 10){
-            sw_one.setText(fav_hr_1 + " : " + "0" +fav_min_1);
-        }else{
-            sw_one.setText("0" + fav_hr_1 + " : " + fav_min_1);
-        }
-
-        if(fav_hr_2 > 9 & fav_min_2 > 9){
-            sw_two.setText(fav_hr_2 + " : " + fav_min_2);
-        }else if(fav_hr_2 < 10 & fav_min_2 < 10){
-            sw_two.setText("0" + fav_hr_2 + " : " + "0" +fav_min_2);
-        }else if(fav_hr_2 > 9 & fav_min_2 < 10){
-            sw_two.setText(fav_hr_2 + " : " + "0" +fav_min_2);
-        }else{
-            sw_two.setText("0" + fav_hr_2 + " : " + fav_min_2);
-        }
-
-        if(fav_hr_3 > 9 & fav_min_3 > 9){
-            sw_three.setText(fav_hr_3 + " : " + fav_min_3);
-        }else if(fav_hr_3 < 10 & fav_min_3 < 10){
-            sw_three.setText("0" + fav_hr_3 + " : " + "0" +fav_min_3);
-        }else if(fav_hr_3 > 9 & fav_min_3 < 10){
-            sw_three.setText(fav_hr_3 + " : " + "0" +fav_min_3);
-        }else{
-            sw_three.setText("0" + fav_hr_3 + " : " + fav_min_3);
-        }
-
-        if(fav_hr_4 > 9 & fav_min_4 > 9){
-            sw_four.setText(fav_hr_4 + " : " + fav_min_4);
-        }else if(fav_hr_4 < 10 & fav_min_4 < 10){
-            sw_four.setText("0" + fav_hr_4 + " : " + "0" +fav_min_4);
-        }else if(fav_hr_4 > 9 & fav_min_4 < 10){
-            sw_four.setText(fav_hr_4 + " : " + "0" +fav_min_4);
-        }else{
-            sw_four.setText("0" + fav_hr_4 + " : " + fav_min_4);
-        }
-
         enable_background(currentHourIn24Format[0], clockSettings);
 
         final BroadcastReceiver m_timeChangedReceiver = new BroadcastReceiver() {
@@ -479,6 +474,7 @@ public class Clock extends Fragment implements popupActivity.OnInputSelected{
             public void onClick(View view) {
                 popupActivity dialog = new popupActivity();
                 dialog.setTargetFragment(Clock.this, 1);
+                assert getFragmentManager() != null;
                 dialog.show(getFragmentManager(), "popupActivity");
             }
         });

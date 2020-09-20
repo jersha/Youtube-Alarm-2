@@ -41,6 +41,7 @@ public class Audio_alarm extends AppCompatActivity {
 
         final SharedPreferences clockSettings = getSharedPreferences("MyClockPreferences", 0);
         str_uri = clockSettings.getString("Uri", "null");
+        assert str_uri != null;
         File file = new File(str_uri);
         if (!file.exists()) {
             uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.alarm);

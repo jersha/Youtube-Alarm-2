@@ -57,17 +57,6 @@ public class Main1 extends AppCompatActivity {
             main_layout.setBackgroundResource(R.drawable.n_glass);
         }
 
-        SharedPreferences.Editor prefEditor = clockSettings.edit();
-        prefEditor.putInt("FavHr1", 4);
-        prefEditor.putInt("FavMin1", 30);
-        prefEditor.putInt("FavHr2", 5);
-        prefEditor.putInt("FavMin2", 30);
-        prefEditor.putInt("FavHr3", 6);
-        prefEditor.putInt("FavMin3", 30);
-        prefEditor.putInt("FavHr4", 7);
-        prefEditor.putInt("FavMin4", 30);
-        prefEditor.apply();
-
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +72,15 @@ public class Main1 extends AppCompatActivity {
                 prefEditor.putString("KeyWord1", ip_kw1);
                 prefEditor.putString("KeyWord2", ip_kw2);
                 prefEditor.putBoolean("notify", true);
+                prefEditor.putInt("Total", 4);
+                prefEditor.putBoolean("Fav0", true);
+                prefEditor.putBoolean("Fav1", true);
+                prefEditor.putBoolean("Fav2", true);
+                prefEditor.putBoolean("Fav3", true);
+                prefEditor.putString("Time0", "04 : 30");
+                prefEditor.putString("Time1", "05 : 30");
+                prefEditor.putString("Time2", "06 : 30");
+                prefEditor.putString("Time3", "07 : 30");
                 prefEditor.apply();
                 startActivity(intent);
                 finish();
@@ -94,6 +92,16 @@ public class Main1 extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences.Editor prefEditor = clockSettings.edit();
                 prefEditor.putBoolean("my_first_time", false);
+                prefEditor.putBoolean("notify", true);
+                prefEditor.putInt("Total", 4);
+                prefEditor.putBoolean("Fav0", true);
+                prefEditor.putBoolean("Fav1", true);
+                prefEditor.putBoolean("Fav2", true);
+                prefEditor.putBoolean("Fav3", true);
+                prefEditor.putString("Time0", "04 : 30");
+                prefEditor.putString("Time1", "05 : 30");
+                prefEditor.putString("Time2", "06 : 30");
+                prefEditor.putString("Time3", "07 : 30");
                 prefEditor.apply();
                 startActivity(intent);
                 finish();

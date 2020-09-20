@@ -1,22 +1,17 @@
 package com.teamscorpion.youtubealarm;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -31,22 +26,22 @@ public class popupActivity extends DialogFragment {
     public interface OnInputSelected{
         void sendInput(String input);
     }
-    public OnInputSelected mOnInputSelected;
+    public OnInputSelected mOnInputSelectedAlarm;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
-        View view = inflater.inflate(R.layout.activity_popup_alarm, null);
+        View view_alarm = inflater.inflate(R.layout.activity_popup_alarm, null);
 
-        builder.setView(view);
+        builder.setView(view_alarm);
 
-        seekHour = view.findViewById(R.id.seekHour);
-        seekMinute = view.findViewById(R.id.seekMinute);
-        txtHour = view.findViewById(R.id.txtHourVal);
-        txtMinute = view.findViewById(R.id.txtMinuteVal);
-        btn_ok = view.findViewById(R.id.btn_ok);
-        btn_cancel = view.findViewById(R.id.btn_cancel);
+        seekHour = view_alarm.findViewById(R.id.seekHour);
+        seekMinute = view_alarm.findViewById(R.id.seekMinute);
+        txtHour = view_alarm.findViewById(R.id.txtHourVal);
+        txtMinute = view_alarm.findViewById(R.id.txtMinuteVal);
+        btn_ok = view_alarm.findViewById(R.id.btn_ok);
+        btn_cancel = view_alarm.findViewById(R.id.btn_cancel);
 
         seekHour.setProgress(0);
         seekMinute.setProgress(0);
@@ -56,7 +51,7 @@ public class popupActivity extends DialogFragment {
         rightNow[0] = Calendar.getInstance();
         currentHourIn24Format[0] = rightNow[0].get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format[0] > 3 & currentHourIn24Format[0] < 12){
-            view.setBackgroundColor(Color.parseColor("#f3989d"));
+            view_alarm.setBackgroundColor(Color.parseColor("#f3989d"));
             btn_ok.setBackgroundResource(R.drawable.m_ok_ripple);
             btn_cancel.setBackgroundResource(R.drawable.m_cancel_ripple);
             Drawable draw_hr= getResources().getDrawable(R.drawable.m_seek_bar, null);
@@ -64,7 +59,7 @@ public class popupActivity extends DialogFragment {
             seekHour.setProgressDrawable(draw_hr);
             seekMinute.setProgressDrawable(draw_min);
         }else if(currentHourIn24Format[0] > 11 & currentHourIn24Format[0] < 17){
-            view.setBackgroundColor(Color.parseColor("#d63447"));
+            view_alarm.setBackgroundColor(Color.parseColor("#d63447"));
             btn_ok.setBackgroundResource(R.drawable.a_ok_ripple);
             btn_cancel.setBackgroundResource(R.drawable.a_cancel_ripple);
             Drawable draw_hr= getResources().getDrawable(R.drawable.a_seek_bar, null);
@@ -72,7 +67,7 @@ public class popupActivity extends DialogFragment {
             seekHour.setProgressDrawable(draw_hr);
             seekMinute.setProgressDrawable(draw_min);
         }else if(currentHourIn24Format[0] > 16 & currentHourIn24Format[0] < 21){
-            view.setBackgroundColor(Color.parseColor("#febc6e"));
+            view_alarm.setBackgroundColor(Color.parseColor("#febc6e"));
             btn_ok.setBackgroundResource(R.drawable.e_ok_ripple);
             btn_cancel.setBackgroundResource(R.drawable.e_cancel_ripple);
             Drawable draw_hr= getResources().getDrawable(R.drawable.e_seek_bar, null);
@@ -80,7 +75,7 @@ public class popupActivity extends DialogFragment {
             seekHour.setProgressDrawable(draw_hr);
             seekMinute.setProgressDrawable(draw_min);
         }else {
-            view.setBackgroundColor(Color.parseColor("#202020"));
+            view_alarm.setBackgroundColor(Color.parseColor("#202020"));
             btn_ok.setBackgroundResource(R.drawable.n_ok_ripple);
             btn_cancel.setBackgroundResource(R.drawable.n_cancel_ripple);
             Drawable draw_hr= getResources().getDrawable(R.drawable.n_seek_bar, null);
@@ -93,7 +88,7 @@ public class popupActivity extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String input = txtHour.getText().toString() + " : " + txtMinute.getText().toString();
-                mOnInputSelected.sendInput(input);
+                mOnInputSelectedAlarm.sendInput(input);
                 Objects.requireNonNull(getDialog()).dismiss();
             }
         });
@@ -156,7 +151,7 @@ public class popupActivity extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            mOnInputSelected = (OnInputSelected) getTargetFragment();
+            mOnInputSelectedAlarm = (OnInputSelected) getTargetFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() +
                     "must implement Listener");
